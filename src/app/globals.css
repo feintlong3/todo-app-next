@@ -1,51 +1,68 @@
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 0;
 }
 
 .todo-form {
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
 }
 
 .todo-form input {
   flex: 1;
-  padding: 0.5rem;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px 0 0 4px;
+  font-size: 16px;
 }
 
 .todo-form button {
-  padding: 0.5rem 1rem;
-  background: #3498db;
+  padding: 10px 15px;
+  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 0 4px 4px 0;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
 }
 
-.todo-item {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem;
-  border-bottom: 1px solid #eee;
+.todo-form button:hover {
+  background-color: #2980b9;
 }
 
-.todo-item.completed .todo-text {
-  text-decoration: line-through;
-  color: #999;
+.todo-list {
+  list-style: none;
+  border-top: 1px solid #eee;
+  padding: 0;
+  margin: 0;
+}
+
+.info {
+  text-align: center;
+  margin-top: 20px;
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.empty-list {
+  color: #7f8c8d;
+  font-size: 14px;
 }

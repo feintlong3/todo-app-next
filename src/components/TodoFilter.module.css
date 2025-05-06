@@ -1,0 +1,24 @@
+.filterContainer {
+  display: flex;
+  margin: 20px 0;
+  gap: 8px;
+}
+
+.filterBtn {
+  background: #eee;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s;
+  &:global(.active) {
+    background: #3498db;
+    color: white;
+  }
+}
+
+.filterBtn:hover {
+  background: #ddd;
+}
