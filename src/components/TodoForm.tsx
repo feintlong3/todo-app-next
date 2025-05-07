@@ -1,37 +1,53 @@
 'use client';
 
 import { useState } from 'react';
-import { TodoFormProps } from '@/types';
+import { useTodoContext } from '@/contexts/TodoContext';
+import { todoFormInputSchema } from '@/schemas/todoSchema';
+import { z } from 'zod';
 
-export const TodoForm: React.FC<TodoFormProps> = ({ onAdd }) => {
+export const TodoForm: React.FC = () => {
   const [text, setText] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const { addTodo } = useTodoContext();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const trimmedText = text.trim();
-    if (trimmedText) {
-      onAdd(trimmedText);
+
+    try {
+      // zodでバリデーション
+      const validatedInput = todoFormInputSchema.parse({ text });
+      addTodo(validatedInput.text);
       setText('');
+      setError(null);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        // エラーメッセージを表示
+        setError(err.errors[0].message);
+      }
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
+    // 入力中はエラーをクリア
+    if (error) setError(null);
   };
 
   return (
     <form onSubmit={handleSubmit} className="todo-form">
-      <input
-        type="text"
-        value={text}
-        onChange={handleChange}
-        placeholder="タイトルを入力..."
-        required
-        className="todo-input"
-      />
-      <button type="submit" className="todo-submit">
-        登録
-      </button>
+      <div className="todo-form-container">
+        <input
+          type="text"
+          value={text}
+          onChange={handleChange}
+          placeholder="タイトルを入力..."
+          className={`todo-input ${error ? 'has-error' : ''}`}
+        />
+        <button type="submit" className="todo-submit">
+          登録
+        </button>
+      </div>
+      {error && <div className="error-message">{error}</div>}
     </form>
   );
 };

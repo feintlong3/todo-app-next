@@ -21,7 +21,6 @@ h1 {
 }
 
 .todo-form {
-  display: flex;
   margin-bottom: 20px;
 }
 
@@ -65,4 +64,18 @@ h1 {
 .empty-list {
   color: #7f8c8d;
   font-size: 14px;
+}
+
+.todo-form-container {
+  display: flex;
+}
+
+.todo-input.has-error {
+  border-color: #e74c3c;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
 }

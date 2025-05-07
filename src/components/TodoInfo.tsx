@@ -1,8 +1,11 @@
 'use client';
 
-import { TodoInfoProps } from '@/types';
+import { useTodoContext } from '@/contexts/TodoContext';
 
-export const TodoInfo: React.FC<TodoInfoProps> = ({ total, completed }) => {
+export const TodoInfo: React.FC = () => {
+  const { stats } = useTodoContext();
+  const { total, completed } = stats;
+
   if (total === 0) {
     return <div className="info">タスクを追加してください</div>;
   }

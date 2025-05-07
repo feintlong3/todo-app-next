@@ -43,3 +43,15 @@ export interface TodoInfoProps {
   total: number;
   completed: number;
 }
+
+export type TodoAction =
+  | { type: 'ADD_TODO'; payload: { text: string } }
+  | { type: 'TOGGLE_TODO'; payload: { id: string } }
+  | { type: 'DELETE_TODO'; payload: { id: string } }
+  | { type: 'EDIT_TODO'; payload: { id: string; text: string } }
+  | { type: 'SET_FILTER'; payload: { filter: TodoFilter } };
+
+export interface TodoState {
+  todos: Todo[];
+  filter: TodoFilter;
+}

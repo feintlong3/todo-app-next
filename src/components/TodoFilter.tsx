@@ -1,12 +1,12 @@
 'use client';
 
-import { TodoFilterProps, TodoFilter as FilterType } from '@/types';
+import { useTodoContext } from '@/contexts/TodoContext';
+import { TodoFilter as FilterType } from '@/types';
 import styles from './TodoFilter.module.css';
 
-export const TodoFilter: React.FC<TodoFilterProps> = ({
-  currentFilter,
-  onFilterChange,
-}) => {
+export const TodoFilter: React.FC = () => {
+  const { filter, changeFilter } = useTodoContext();
+
   const filters: { value: FilterType; label: string }[] = [
     { value: 'all', label: 'すべて' },
     { value: 'active', label: '未完了' },
@@ -15,13 +15,13 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
 
   return (
     <div className={styles.filterContainer}>
-      {filters.map((filter) => (
+      {filters.map((filterOption) => (
         <button
-          key={filter.value}
-          className={`${styles.filterBtn} ${currentFilter === filter.value ? 'active' : ''}`.trim()}
-          onClick={() => onFilterChange(filter.value)}
+          key={filterOption.value}
+          className={`${styles.filterBtn} ${filter === filterOption.value ? 'active' : ''}`.trim()}
+          onClick={() => changeFilter(filterOption.value)}
         >
-          {filter.label}
+          {filterOption.label}
         </button>
       ))}
     </div>

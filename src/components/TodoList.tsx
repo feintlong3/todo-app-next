@@ -4,13 +4,7 @@ import { TodoListProps, Todo } from '@/types';
 import { ItemList } from './ItemList';
 import { TodoItem } from './TodoItem';
 
-export const TodoList: React.FC<TodoListProps> = ({
-  todos,
-  filter,
-  onToggle,
-  onDelete,
-  onEdit,
-}) => {
+export const TodoList: React.FC<TodoListProps> = ({ todos, filter }) => {
   // フィルタリングされたToDoリストを取得
   const filteredTodos = todos.filter((todo) => {
     if (filter === 'active') return !todo.completed;
@@ -28,14 +22,7 @@ export const TodoList: React.FC<TodoListProps> = ({
     );
   }
 
-  const renderTodoItem = (todo: Todo) => (
-    <TodoItem
-      todo={todo}
-      onToggle={onToggle}
-      onDelete={onDelete}
-      onEdit={onEdit}
-    />
-  );
+  const renderTodoItem = (todo: Todo) => <TodoItem todo={todo} />;
 
   return (
     <ItemList
