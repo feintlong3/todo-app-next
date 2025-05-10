@@ -1,69 +1,146 @@
-.todoItem {
+.item {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  margin-bottom: 0.75rem;
+  background-color: white;
+}
+
+.todoContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkboxLabel {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  padding: 12px 0;
+  gap: 0.75rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.25rem;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+.text {
+  font-size: 1rem;
+  color: #111827;
+  word-break: break-word;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton,
+.deleteButton {
+  padding: 0.375rem 0.75rem;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  cursor: pointer;
   transition: background-color 0.2s;
 }
 
-.todoItem:hover {
-  background-color: #f9f9f9;
+.editButton:hover:not(.disabled),
+.deleteButton:hover {
+  background-color: #e5e7eb;
 }
 
-.todoItem.completed .todoText {
-  text-decoration: line-through;
-  color: #999;
+.deleteButton {
+  color: #ef4444;
 }
 
-.todoCheckbox {
-  margin-right: 10px;
+.deleteButton:hover {
+  background-color: #fee2e2;
 }
 
-.todoText {
-  flex: 1;
-  padding: 4px 0;
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.todoEditInput {
-  flex: 1;
-  font-size: 16px;
-  padding: 4px 8px;
-  border: 1px solid #3498db;
-  border-radius: 4px;
-  outline: none;
-}
-
-.todoActions {
+.editContainer {
   display: flex;
-  margin-left: auto;
+  gap: 0.75rem;
+  align-items: center;
 }
 
-.editBtn {
-  background: none;
-  border: none;
-  color: #3498db;
-  font-size: 14px;
+.editInput {
+  flex: 1;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #3b82f6;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+.editInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.editActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.saveButton,
+.cancelButton {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  padding: 0 8px;
-  opacity: 0.6;
-  transition: opacity 0.2s;
+  transition: background-color 0.2s;
 }
 
-.editBtn:hover {
-  opacity: 1;
-}
-
-.deleteBtn {
-  background: none;
+.saveButton {
+  background-color: #3b82f6;
+  color: white;
   border: none;
-  color: #e74c3c;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 0 8px;
-  opacity: 0.6;
-  transition: opacity 0.2s;
 }
 
-.deleteBtn:hover {
-  opacity: 1;
+.saveButton:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.saveButton:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  background-color: white;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+}
+
+.cancelButton:hover {
+  background-color: #f3f4f6;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.date {
+  white-space: nowrap;
 }

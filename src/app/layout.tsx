@@ -1,10 +1,6 @@
-import type { Metadata } from 'next';
+import { AuthProvider } from '@/components/auth/AuthProvider';
+import { Header } from '@/components/layout/Header';
 import './globals.css';
-
-export const metadata: Metadata = {
-  title: 'ToDoリストアプリ',
-  description: 'Next.jsとTypeScriptで実装したToDoリストアプリ',
-};
 
 export default function RootLayout({
   children,
@@ -14,7 +10,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <main className="container">{children}</main>
+        <AuthProvider>
+          <Header />
+          <main>{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );
