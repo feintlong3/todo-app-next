@@ -4,7 +4,7 @@ import {
   sortTodosByDate,
   getTodoStats,
 } from '../todoUtils';
-import { Todo } from '@/types';
+import { Todo } from '@/types/todo';
 
 describe('todoUtils', () => {
   const mockTodos: Todo[] = [
@@ -12,19 +12,22 @@ describe('todoUtils', () => {
       id: '1',
       text: 'タスク1',
       completed: false,
-      createdAt: new Date('2023-01-01'),
+      createdAt: '2023-01-01T00:00:00.000Z',
+      updatedAt: '2023-01-01T00:00:00.000Z',
     },
     {
       id: '2',
       text: 'タスク2',
       completed: true,
-      createdAt: new Date('2023-01-02'),
+      createdAt: '2023-01-02T00:00:00.000Z',
+      updatedAt: '2023-01-02T00:00:00.000Z',
     },
     {
       id: '3',
       text: 'タスク3',
       completed: false,
-      createdAt: new Date('2023-01-03'),
+      createdAt: '2023-01-03T00:00:00.000Z',
+      updatedAt: '2023-01-03T00:00:00.000Z',
     },
   ];
 

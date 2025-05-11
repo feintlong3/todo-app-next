@@ -1,4 +1,4 @@
-import { Todo } from '@/types';
+import { Todo } from '@/types/todo';
 
 // 完了済みタスクの型ガード
 export function isCompletedTodo(todo: Todo): boolean {
@@ -16,7 +16,10 @@ export function sortTodosByDate(
   ascending: boolean = true
 ): Todo[] {
   return [...todos].sort((a, b) => {
-    const dateComparison = a.createdAt.getTime() - b.createdAt.getTime();
+    // 文字列形式の日付をDateオブジェクトに変換してから比較
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+    const dateComparison = dateA - dateB;
     return ascending ? dateComparison : -dateComparison;
   });
 }
