@@ -1,25 +1,21 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { TodoContext } from '@/contexts/TodoContext';
+import { useTodoContext } from '@/contexts/TodoContext';
 import styles from './TodoInput.module.css';
 
 export function TodoInput() {
   const [text, setText] = useState('');
-  const { isAuthenticated, user } = useAuth();
-  const { dispatch } = useContext(TodoContext);
+  const { isAuthenticated } = useAuth();
+  const { addTodo } = useTodoContext();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!text.trim()) return;
+    if (!text.trim() || !isAuthenticated) return;
 
-    // ユーザーIDを付与してToDoを追加
-    dispatch({
-      type: 'ADD',
-      payload: text.trim(),
-      userId: user?.id,
-    });
+    // ユーザーIDを持つタスクの追加はaddTodoで行う
+    addTodo(text.trim());
     setText('');
   };
 

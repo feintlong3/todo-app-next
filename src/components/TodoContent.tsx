@@ -2,13 +2,12 @@
 
 import { useTodoContext } from '@/contexts/TodoContext';
 import { TodoForm } from './TodoForm';
-import { TodoList } from './TodoList';
 import { TodoFilter } from './TodoFilter';
 import { TodoInfo } from './TodoInfo';
+import { TodoList } from './TodoList';
 
 export const TodoContent: React.FC = () => {
-  const { filteredTodos, filter, toggleTodo, deleteTodo, editTodo } =
-    useTodoContext();
+  const { filteredTodos, toggleTodo, deleteTodo, editTodo } = useTodoContext();
 
   return (
     <>
@@ -20,7 +19,6 @@ export const TodoContent: React.FC = () => {
 
       <TodoList
         todos={filteredTodos}
-        filter={filter}
         onToggle={toggleTodo}
         onDelete={deleteTodo}
         onEdit={editTodo}

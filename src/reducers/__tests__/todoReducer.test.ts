@@ -1,5 +1,4 @@
-import { todoReducer } from '../todoReducer';
-import { TodoState, TodoAction } from '@/types';
+import { todoReducer, TodoState, TodoAction } from '../todoReducer';
 
 describe('todoReducer', () => {
   const initialState: TodoState = {
@@ -8,7 +7,9 @@ describe('todoReducer', () => {
         id: '1',
         text: 'テストタスク',
         completed: false,
-        createdAt: new Date('2023-01-01'),
+        userId: 'test-user-id',
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z',
       },
     ],
     filter: 'all',
@@ -67,6 +68,10 @@ describe('todoReducer', () => {
     const newState = todoReducer(initialState, action);
 
     expect(newState.todos[0].text).toBe('編集後のタスク');
+    // updatedAtが更新されていることを確認
+    expect(newState.todos[0].updatedAt).not.toBe(
+      initialState.todos[0].updatedAt
+    );
   });
 
   it('SET_FILTERアクションが正しく処理されること', () => {
@@ -78,6 +83,65 @@ describe('todoReducer', () => {
     const newState = todoReducer(initialState, action);
 
     expect(newState.filter).toBe('completed');
+  });
+
+  it('COMPLETE_ALLアクションが正しく処理されること', () => {
+    const action: TodoAction = {
+      type: 'COMPLETE_ALL',
+    };
+
+    // すべて未完了の状態
+    const newState = todoReducer(initialState, action);
+    expect(newState.todos.every((todo) => todo.completed)).toBe(true);
+
+    // すべて完了の状態からすべて未完了にする
+    const nextState = todoReducer(newState, action);
+    expect(nextState.todos.every((todo) => !todo.completed)).toBe(true);
+  });
+
+  it('CLEAR_COMPLETEDアクションが正しく処理されること', () => {
+    // まずは1つのタスクを完了状態にする
+    const stateWithCompleted = todoReducer(initialState, {
+      type: 'TOGGLE_TODO',
+      payload: { id: '1' },
+    });
+
+    // 新しいタスクを追加
+    const stateWithMultiple = todoReducer(stateWithCompleted, {
+      type: 'ADD_TODO',
+      payload: { text: '未完了タスク' },
+    });
+
+    // 完了済みをクリア
+    const newState = todoReducer(stateWithMultiple, {
+      type: 'CLEAR_COMPLETED',
+    });
+
+    expect(newState.todos.length).toBe(1);
+    expect(newState.todos[0].text).toBe('未完了タスク');
+    expect(newState.todos[0].completed).toBe(false);
+  });
+
+  it('INITIALIZEアクションが正しく処理されること', () => {
+    const newTodos = [
+      {
+        id: '2',
+        text: '初期化タスク',
+        completed: true,
+        userId: 'test-user-id',
+        createdAt: '2023-02-01T00:00:00.000Z',
+        updatedAt: '2023-02-01T00:00:00.000Z',
+      },
+    ];
+
+    const action: TodoAction = {
+      type: 'INITIALIZE',
+      payload: newTodos,
+    };
+
+    const newState = todoReducer(initialState, action);
+
+    expect(newState.todos).toEqual(newTodos);
   });
 
   it('存在しないアクションは状態を変更しないこと', () => {

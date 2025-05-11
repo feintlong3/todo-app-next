@@ -1,7 +1,7 @@
 'use client';
 
 import { useTodoContext } from '@/contexts/TodoContext';
-import { TodoFilter as FilterType } from '@/types';
+import { FilterType } from '@/types/todo';
 import styles from './TodoFilter.module.css';
 
 export const TodoFilter: React.FC = () => {

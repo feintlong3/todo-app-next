@@ -1,16 +1,17 @@
 'use client';
 
-import { useState, useRef, useEffect, useContext } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Todo } from '@/types/todo';
-import { TodoContext } from '@/contexts/TodoContext';
 import styles from './TodoItem.module.css';
 
 interface TodoItemProps {
   todo: Todo;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
+  onEdit: (id: string, text: string) => void;
 }
 
-export function TodoItem({ todo }: TodoItemProps) {
-  const { dispatch } = useContext(TodoContext);
+export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const editInputRef = useRef<HTMLInputElement>(null);
@@ -38,10 +39,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   // 編集を保存
   const handleSaveEdit = () => {
     if (editText.trim()) {
-      dispatch({
-        type: 'EDIT',
-        payload: { id: todo.id, text: editText.trim() },
-      });
+      onEdit(todo.id, editText.trim());
       setIsEditing(false);
     }
   };
@@ -87,12 +85,12 @@ export function TodoItem({ todo }: TodoItemProps) {
               <input
                 type="checkbox"
                 checked={todo.completed}
-                onChange={() => dispatch({ type: 'TOGGLE', payload: todo.id })}
+                onChange={() => onToggle(todo.id)}
                 className={styles.checkbox}
               />
               <span
                 className={`${styles.text} ${todo.completed ? styles.completed : ''}`}
-                onClick={() => dispatch({ type: 'TOGGLE', payload: todo.id })}
+                onClick={() => onToggle(todo.id)}
               >
                 {todo.text}
               </span>
@@ -112,7 +110,7 @@ export function TodoItem({ todo }: TodoItemProps) {
                 編集
               </button>
               <button
-                onClick={() => dispatch({ type: 'REMOVE', payload: todo.id })}
+                onClick={() => onDelete(todo.id)}
                 className={styles.deleteButton}
                 title="タスクを削除"
               >

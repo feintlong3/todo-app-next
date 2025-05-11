@@ -12,7 +12,7 @@ export function Header() {
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.logo}>
-          <Link href="/">ToDoアプリ</Link>
+          <Link href="/">To-Doリストアプリ</Link>
         </div>
 
         <nav className={styles.nav}>

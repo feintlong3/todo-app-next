@@ -1,7 +1,8 @@
 .header {
   background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e5e7eb;
   padding: 1rem 0;
+  margin-bottom: 1.25rem;
 }
 
 .container {
@@ -10,12 +11,11 @@
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .logo a {
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 0.875rem;
   color: #111827;
   text-decoration: none;
 }
