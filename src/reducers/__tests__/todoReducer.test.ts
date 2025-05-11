@@ -1,13 +1,32 @@
 import { todoReducer, TodoState, TodoAction } from '../todoReducer';
 
+// UUIDをモック
+jest.mock('uuid', () => ({
+  v4: jest.fn(() => 'mocked-uuid'),
+}));
+
 describe('todoReducer', () => {
+  // 日付関数をモック
+  const mockDate = new Date('2023-01-01T12:00:00.000Z');
+  const originalDateNow = Date.now;
+  const originalToISOString = Date.prototype.toISOString;
+
+  beforeAll(() => {
+    global.Date.now = jest.fn(() => mockDate.getTime());
+    Date.prototype.toISOString = jest.fn(() => '2023-01-01T12:00:00.000Z');
+  });
+
+  afterAll(() => {
+    global.Date.now = originalDateNow;
+    Date.prototype.toISOString = originalToISOString;
+  });
+
   const initialState: TodoState = {
     todos: [
       {
         id: '1',
         text: 'テストタスク',
         completed: false,
-        userId: 'test-user-id',
         createdAt: '2023-01-01T00:00:00.000Z',
         updatedAt: '2023-01-01T00:00:00.000Z',
       },
@@ -24,12 +43,11 @@ describe('todoReducer', () => {
     const newState = todoReducer(initialState, action);
 
     expect(newState.todos.length).toBe(2);
-    expect(newState.todos[1].text).toBe('新しいタスク');
-    expect(newState.todos[1].completed).toBe(false);
-    // UUIDのフォーマットをチェック
-    expect(newState.todos[1].id).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
-    );
+    expect(newState.todos[0].text).toBe('新しいタスク');
+    expect(newState.todos[0].completed).toBe(false);
+    expect(newState.todos[0].id).toBe('mocked-uuid');
+    expect(newState.todos[0].createdAt).toBe('2023-01-01T12:00:00.000Z');
+    expect(newState.todos[0].updatedAt).toBe('2023-01-01T12:00:00.000Z');
   });
 
   it('TOGGLE_TODOアクションが正しく処理されること', () => {
@@ -41,11 +59,13 @@ describe('todoReducer', () => {
     const newState = todoReducer(initialState, action);
 
     expect(newState.todos[0].completed).toBe(true);
+    expect(newState.todos[0].updatedAt).toBe('2023-01-01T12:00:00.000Z');
 
     // 再度トグルして元に戻ることを確認
     const nextState = todoReducer(newState, action);
 
     expect(nextState.todos[0].completed).toBe(false);
+    expect(nextState.todos[0].updatedAt).toBe('2023-01-01T12:00:00.000Z');
   });
 
   it('DELETE_TODOアクションが正しく処理されること', () => {
@@ -68,10 +88,7 @@ describe('todoReducer', () => {
     const newState = todoReducer(initialState, action);
 
     expect(newState.todos[0].text).toBe('編集後のタスク');
-    // updatedAtが更新されていることを確認
-    expect(newState.todos[0].updatedAt).not.toBe(
-      initialState.todos[0].updatedAt
-    );
+    expect(newState.todos[0].updatedAt).toBe('2023-01-01T12:00:00.000Z');
   });
 
   it('SET_FILTERアクションが正しく処理されること', () => {
@@ -93,10 +110,12 @@ describe('todoReducer', () => {
     // すべて未完了の状態
     const newState = todoReducer(initialState, action);
     expect(newState.todos.every((todo) => todo.completed)).toBe(true);
+    expect(newState.todos[0].updatedAt).toBe('2023-01-01T12:00:00.000Z');
 
     // すべて完了の状態からすべて未完了にする
     const nextState = todoReducer(newState, action);
     expect(nextState.todos.every((todo) => !todo.completed)).toBe(true);
+    expect(nextState.todos[0].updatedAt).toBe('2023-01-01T12:00:00.000Z');
   });
 
   it('CLEAR_COMPLETEDアクションが正しく処理されること', () => {
@@ -128,7 +147,6 @@ describe('todoReducer', () => {
         id: '2',
         text: '初期化タスク',
         completed: true,
-        userId: 'test-user-id',
         createdAt: '2023-02-01T00:00:00.000Z',
         updatedAt: '2023-02-01T00:00:00.000Z',
       },

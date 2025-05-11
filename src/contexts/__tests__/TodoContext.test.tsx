@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { TodoProvider, useTodoContext } from '../TodoContext';
 import React from 'react';
 
@@ -39,7 +39,20 @@ const TestComponent = () => {
   );
 };
 
+// UUID生成をモック
+jest.mock('uuid', () => ({
+  v4: jest.fn(() => 'test-uuid-123'),
+}));
+
 describe('TodoContext', () => {
+  beforeEach(() => {
+    jest.useFakeTimers(); // 時間関連の操作をモック化
+  });
+
+  afterEach(() => {
+    jest.useRealTimers(); // モックをリセット
+  });
+
   it('コンテキストが正しく機能すること', () => {
     render(
       <TodoProvider>
@@ -59,12 +72,10 @@ describe('TodoContext', () => {
     expect(screen.getByText('テストタスク')).toBeInTheDocument();
 
     // タスク完了ボタンをクリック
-    const todoId =
-      todoItem.getAttribute('data-testid')?.replace('todo-item-', '') || '';
+    const todoId = 'test-uuid-123'; // モックされたUUID
     fireEvent.click(screen.getByTestId(`toggle-${todoId}`));
 
     // タスクが完了状態になったことを確認
-    // data-testidを使用して要素を特定
     const todoText = screen.getByTestId(`todo-text-${todoId}`);
     expect(todoText).toHaveClass('completed');
     expect(screen.getByTestId(`toggle-${todoId}`)).toHaveTextContent(
@@ -78,22 +89,22 @@ describe('TodoContext', () => {
     expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
   });
 
-  it('フィルター機能が正しく動作すること', () => {
+  it('フィルター機能が正しく動作すること', async () => {
     const FilterTestComponent = () => {
       const { addTodo, toggleTodo, filter, changeFilter, filteredTodos } =
         useTodoContext();
 
-      // テスト用のデータを追加
+      // テスト用のデータを追加（コンポーネントマウント時）
       React.useEffect(() => {
-        addTodo('タスク1'); // 最初のタスク
+        // 2つのタスクを追加：1つは完了、1つは未完了
+        addTodo('タスク1');
+
+        // 非同期処理を模倣
         setTimeout(() => {
-          // 最初のタスクのIDを取得
-          const taskId = document
-            .querySelector('li')
-            ?.getAttribute('data-testid')
-            ?.replace('todo-item-', '');
-          if (taskId) toggleTodo(taskId); // 最初のタスクを完了状態に
-          addTodo('タスク2'); // 2つ目のタスク（未完了）
+          // 最初のタスクを完了状態に
+          toggleTodo('test-uuid-123');
+          // 2つ目のタスクを追加
+          addTodo('タスク2');
         }, 0);
       }, [addTodo, toggleTodo]);
 
@@ -136,6 +147,11 @@ describe('TodoContext', () => {
     expect(screen.getByTestId('current-filter')).toHaveTextContent(
       '現在のフィルター: all'
     );
+
+    // タイマーを進めて非同期処理を完了させる
+    act(() => {
+      jest.runAllTimers();
+    });
 
     // 完了フィルターをクリック
     fireEvent.click(screen.getByTestId('filter-completed'));

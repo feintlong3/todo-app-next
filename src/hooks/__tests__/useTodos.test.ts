@@ -7,6 +7,8 @@ jest.mock('@/contexts/TodoContext');
 
 describe('useTodos', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+
     // モックの設定
     (useTodoContext as jest.Mock).mockReturnValue({
       todos: [],
@@ -17,6 +19,7 @@ describe('useTodos', () => {
         completed: 0,
         active: 0,
       },
+      dispatch: jest.fn(),
       addTodo: jest.fn(),
       toggleTodo: jest.fn(),
       deleteTodo: jest.fn(),
@@ -39,6 +42,7 @@ describe('useTodos', () => {
       filter: 'all',
       filteredTodos: [],
       stats: { total: 0, completed: 0, active: 0 },
+      dispatch: jest.fn(),
       addTodo: jest.fn(),
       toggleTodo: jest.fn(),
       deleteTodo: jest.fn(),
@@ -74,6 +78,7 @@ describe('useTodos', () => {
         },
       ],
       stats: { total: 1, completed: 0, active: 1 },
+      dispatch: jest.fn(),
       addTodo: jest.fn(),
       toggleTodo: jest.fn(),
       deleteTodo: jest.fn(),
