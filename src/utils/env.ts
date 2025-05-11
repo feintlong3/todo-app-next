@@ -9,6 +9,8 @@ const serverSchema = z.object({
   NEXTAUTH_SECRET: z.string().min(1),
   GOOGLE_CLIENT_ID: z.string().min(1),
   GOOGLE_CLIENT_SECRET: z.string().min(1),
+  // データベース関連
+  DATABASE_URL: z.string().min(1),
 });
 
 // クライアント環境で利用する環境変数のスキーマ

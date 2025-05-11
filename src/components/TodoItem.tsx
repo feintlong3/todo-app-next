@@ -53,6 +53,16 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
     }
   };
 
+  // 日付をフォーマット
+  const formatDate = (dateString: string | Date) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
   return (
     <li className={styles.item}>
       {isEditing ? (
@@ -121,13 +131,14 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
           <div className={styles.meta}>
             <span className={styles.date}>
-              作成日: {new Date(todo.createdAt).toLocaleDateString()}
+              作成日: {formatDate(todo.createdAt)}
             </span>
-            {todo.updatedAt !== todo.createdAt && (
-              <span className={styles.date}>
-                更新日: {new Date(todo.updatedAt).toLocaleDateString()}
-              </span>
-            )}
+            {todo.updatedAt &&
+              String(todo.updatedAt) !== String(todo.createdAt) && (
+                <span className={styles.date}>
+                  更新日: {formatDate(todo.updatedAt)}
+                </span>
+              )}
           </div>
         </>
       )}
