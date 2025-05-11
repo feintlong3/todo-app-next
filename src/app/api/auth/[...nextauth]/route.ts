@@ -5,7 +5,7 @@ import { getServerEnv } from '@/utils/env';
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = getServerEnv();
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID,
