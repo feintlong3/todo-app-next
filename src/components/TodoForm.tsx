@@ -5,14 +5,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTodoContext } from '@/contexts/TodoContext';
 import { todoFormInputSchema } from '@/schemas/todoSchema';
 import { z } from 'zod';
+import { createTodo } from '@/app/actions/todoActions';
 
 export const TodoForm: React.FC = () => {
   const [text, setText] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { addTodo } = useTodoContext();
+  const { dispatch } = useTodoContext();
   const { isAuthenticated } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!isAuthenticated) return;
@@ -20,13 +21,30 @@ export const TodoForm: React.FC = () => {
     try {
       // zodでバリデーション
       const validatedInput = todoFormInputSchema.parse({ text });
-      addTodo(validatedInput.text);
-      setText('');
-      setError(null);
+
+      // Server Action実行
+      const formData = new FormData();
+      formData.append('text', validatedInput.text);
+      const result = await createTodo(formData);
+
+      if (result.success && result.todo) {
+        // TodoContextに追加
+        dispatch({
+          type: 'ADD_TODO',
+          payload: { text: validatedInput.text },
+        });
+        setText('');
+        setError(null);
+      } else if (result.error) {
+        setError(result.error);
+      }
     } catch (err) {
       if (err instanceof z.ZodError) {
         // エラーメッセージを表示
         setError(err.errors[0].message);
+      } else {
+        setError('エラーが発生しました');
+        console.error(err);
       }
     }
   };

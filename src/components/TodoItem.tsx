@@ -6,9 +6,9 @@ import styles from './TodoItem.module.css';
 
 interface TodoItemProps {
   todo: Todo;
-  onToggle: (id: string) => void;
-  onDelete: (id: string) => void;
-  onEdit: (id: string, text: string) => void;
+  onToggle: () => void;
+  onDelete: () => void;
+  onEdit: (text: string) => void;
 }
 
 export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
@@ -27,19 +27,20 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
   const handleEdit = () => {
     if (!todo.completed) {
       setIsEditing(true);
+      setEditText(todo.text); // 編集開始時に現在のテキストをセット
     }
   };
 
   // 編集をキャンセル
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setEditText(todo.text);
+    setEditText(todo.text); // 元のテキストに戻す
   };
 
   // 編集を保存
   const handleSaveEdit = () => {
     if (editText.trim()) {
-      onEdit(todo.id, editText.trim());
+      onEdit(editText.trim());
       setIsEditing(false);
     }
   };
@@ -95,12 +96,11 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
               <input
                 type="checkbox"
                 checked={todo.completed}
-                onChange={() => onToggle(todo.id)}
+                onChange={onToggle}
                 className={styles.checkbox}
               />
               <span
                 className={`${styles.text} ${todo.completed ? styles.completed : ''}`}
-                onClick={() => onToggle(todo.id)}
               >
                 {todo.text}
               </span>
@@ -120,7 +120,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
                 編集
               </button>
               <button
-                onClick={() => onDelete(todo.id)}
+                onClick={onDelete}
                 className={styles.deleteButton}
                 title="タスクを削除"
               >

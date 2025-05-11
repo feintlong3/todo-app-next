@@ -22,7 +22,6 @@ export function todoReducer(state: TodoState, action: TodoAction): TodoState {
       return {
         ...state,
         todos: [
-          ...state.todos,
           {
             id: uuidv4(),
             text: action.payload.text,
@@ -30,6 +29,7 @@ export function todoReducer(state: TodoState, action: TodoAction): TodoState {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
+          ...state.todos,
         ],
       };
 
@@ -91,6 +91,7 @@ export function todoReducer(state: TodoState, action: TodoAction): TodoState {
       };
 
     case 'INITIALIZE':
+      // 既存のフィルター設定は保持
       return {
         ...state,
         todos: action.payload,
