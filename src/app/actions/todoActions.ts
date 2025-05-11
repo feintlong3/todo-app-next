@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 
 // 入力バリデーション用のスキーマ
 const todoSchema = z.object({
