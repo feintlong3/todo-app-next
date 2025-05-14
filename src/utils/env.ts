@@ -11,6 +11,7 @@ const serverSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().min(1),
   // データベース関連
   DATABASE_URL: z.string().min(1),
+  DIRECT_URL: z.string().min(1),
 });
 
 // クライアント環境で利用する環境変数のスキーマ
